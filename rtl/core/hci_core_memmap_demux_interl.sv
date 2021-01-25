@@ -18,8 +18,8 @@ import hwpe_stream_package::*;
 
 module hci_core_memmap_demux_interl #(
   parameter int unsigned NB_REGION = 2,
-  parameter int unsigned AW  = 32, /// addr width
-  parameter int unsigned AWC = 32  /// addr width core (useful part!)
+  parameter int unsigned AW  = hci_package::DEFAULT_AW, /// addr width
+  parameter int unsigned AWC = hci_package::DEFAULT_AW  /// addr width core (useful part!)
 )
 (
   input  logic         clk_i,

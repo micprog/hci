@@ -19,7 +19,7 @@ import hwpe_stream_package::*;
 module hci_core_memmap_filter #(
   parameter int unsigned NB_REGION = 2,
   parameter int unsigned NB_INTERLEAVED_REGION = 1,
-  parameter int unsigned AW = 32 /// addr width
+  parameter int unsigned AW = hci_package::DEFAULT_AW /// addr width
 )
 (
   input  logic         clk_i,

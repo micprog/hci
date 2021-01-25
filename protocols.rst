@@ -3,7 +3,7 @@ HWPE-Mem
 
 .. HWPEs are connected to external L1/L2 shared-memory by means of a simple
 .. memory protocol, using a request/grant handshake. The protocol used is
-.. called HWPE Memory (*HWPE-Mem*) protocol, and it is essnetially similar
+.. called HWPE Memory (*HWPE-Mem*) protocol, and it is essentially similar
 .. to the protocol used by cores and DMAs operating on memories.
 .. This document focuses on the specific signal names used within HWPEs
 .. and in the reference implementation of HWPE-Stream IPs.
@@ -48,7 +48,7 @@ HWPE-Mem
   +------------+----------+----------------------------------------+---------------------+
   | *ps*       | `SW`     | Packet stride in number of words.      | *master* to *slave* |
   +------------+----------+----------------------------------------+---------------------+
-  | *r_data*   | 32 bit   | Loaded data word.                      | *slave* to *master* |
+  | *r_data*   | `DW`     | Loaded data word.                      | *slave* to *master* |
   +------------+----------+----------------------------------------+---------------------+
   | *r_valid*  | 1 bit    | Valid loaded data word (1=asserted).   | *slave* to *master* |
   +------------+----------+----------------------------------------+---------------------+
