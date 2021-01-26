@@ -145,7 +145,7 @@ module hci_core_memmap_filter #(
         end
         ERROR: begin
           slave.r_valid = 1'b1;
-          slave.r_data  = 32'hbadacce5;
+          slave.r_data  = 32'hbadacce5; // May need modification for DW != 32
           slave.r_opc   = 1;
         end
         default: begin

@@ -95,8 +95,7 @@ module hci_core_source
 
   // this is simply exploiting the fact that we can make a wider data access than strictly necessary!
   assign stream_data_misaligned = tcdm.r_valid ? tcdm.r_data : stream_data_q; // is this strictly necessary to keep the HWPE-Stream protocol? or can be avoided with a FIFO q?
-  always_comb
-  begin
+  always_comb begin
     stream_data_aligned = '0;
     case(addr_misaligned_q)
       2'b00: begin
@@ -154,47 +153,43 @@ module hci_core_source
     .pop_o   ( addr_misaligned_pop  )
   );
 
-  always_ff @(posedge clk_i or negedge rst_ni)
-  begin
-    if(~rst_ni)
+  always_ff @(posedge clk_i or negedge rst_ni) begin
+    if(~rst_ni) begin
       stream_valid_q <= 1'b0;
-    else if(clear_i)
+    end else if(clear_i) begin
       stream_valid_q <= 1'b0;
-    else if(enable_i) begin
-      if(tcdm.r_valid & stream.ready)
+    end else if(enable_i) begin
+      if(tcdm.r_valid & stream.ready) begin
         stream_valid_q <= 1'b0;
-      else if(tcdm.r_valid)
+      end else if(tcdm.r_valid) begin
         stream_valid_q <= 1'b1;
-      else if(stream_valid_q & stream.ready)
+      end else if(stream_valid_q & stream.ready) begin
         stream_valid_q <= 1'b0;
+      end
     end
   end
 
-  always_ff @(posedge clk_i or negedge rst_ni)
-  begin
-    if(~rst_ni)
+  always_ff @(posedge clk_i or negedge rst_ni) begin
+    if(~rst_ni) begin
       stream_data_q <= '0;
-    else if(clear_i)
+    end else if(clear_i) begin
       stream_data_q <= '0;
-    else if(enable_i & tcdm.r_valid)
+    end else if(enable_i & tcdm.r_valid) begin
       stream_data_q <= tcdm.r_data;
+    end
   end
 
-  always_ff @(posedge clk_i, negedge rst_ni)
-  begin : fsm_seq
+  always_ff @(posedge clk_i, negedge rst_ni) begin : fsm_seq
     if(rst_ni == 1'b0) begin
       cs <= STREAMER_IDLE;
-    end
-    else if(clear_i == 1'b1) begin
+    end else if(clear_i == 1'b1) begin
       cs <= STREAMER_IDLE;
-    end
-    else if(enable_i) begin
+    end else if(enable_i) begin
       cs <= ns;
     end
   end
 
-  always_comb
-  begin : fsm_comb
+  always_comb begin : fsm_comb
     ns                  = cs;
     done                = 1'b0;
     flags_o.ready_start = 1'b0;
@@ -232,14 +227,14 @@ module hci_core_source
 
   assign stream_cnt_en = stream.valid & stream.ready;
 
-  always_ff @(posedge clk_i or negedge rst_ni)
-  begin
-    if(~rst_ni)
+  always_ff @(posedge clk_i or negedge rst_ni) begin
+    if(~rst_ni) begin
       stream_cnt_q <= '0;
-    else if(clear_i | stream_cnt_clr)
+    end else if(clear_i | stream_cnt_clr) begin
       stream_cnt_q <= '0;
-    else if(enable_i & stream_cnt_en)
+    end else if(enable_i & stream_cnt_en) begin
       stream_cnt_q <= stream_cnt_d;
+    end
   end
   assign stream_cnt_d = stream_cnt_q + 1;
 

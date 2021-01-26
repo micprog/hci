@@ -21,7 +21,7 @@ module hci_core_sink
   // Stream interface params
   parameter int unsigned DATA_WIDTH      = hci_package::DEFAULT_DW,
   parameter int unsigned TCDM_FIFO_DEPTH = 0,
-  parameter int unsigned TRANS_CNT = 16
+  parameter int unsigned TRANS_CNT       = 16
 )
 (
   input logic clk_i,
@@ -100,8 +100,7 @@ module hci_core_sink
   assign stream_data_misaligned = stream.data;
   assign stream_strb_misaligned = stream.strb;
 
-  always_comb
-  begin
+  always_comb begin
     stream_data_aligned = '0;
     stream_strb_aligned = '0;
     case(addr_fifo.data[1:0])

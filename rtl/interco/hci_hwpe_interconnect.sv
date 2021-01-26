@@ -94,27 +94,27 @@ module hci_hwpe_interconnect
 
     // FIFOs for HWPE ports
     if(FIFO_DEPTH == 0) begin: no_fifo_gen
-    hci_core_assign i_no_fifo (
-      .tcdm_slave  ( in            ),
-      .tcdm_master ( postfifo      )
-    );
+      hci_core_assign i_no_fifo (
+        .tcdm_slave  ( in            ),
+        .tcdm_master ( postfifo      )
+      );
     end // no_fifo_gen
     else begin: fifo_gen
-    hci_core_fifo #(
-      .FIFO_DEPTH ( FIFO_DEPTH ),
-      .DW         ( DWH        ),
-      .BW         ( AWH        ),
-      .AW         ( BWH        ),
-      .WW         ( WWH        ),
-      .OW         ( OWH        )
-    ) i_fifo (
-      .clk_i       ( clk_i         ),
-      .rst_ni      ( rst_ni        ),
-      .clear_i     ( clear_i       ),
-      .flags_o     (               ),
-      .tcdm_slave  ( in            ),
-      .tcdm_master ( postfifo      )
-    );
+      hci_core_fifo #(
+        .FIFO_DEPTH ( FIFO_DEPTH ),
+        .DW         ( DWH        ),
+        .BW         ( AWH        ),
+        .AW         ( BWH        ),
+        .WW         ( WWH        ),
+        .OW         ( OWH        )
+      ) i_fifo (
+        .clk_i       ( clk_i         ),
+        .rst_ni      ( rst_ni        ),
+        .clear_i     ( clear_i       ),
+        .flags_o     (               ),
+        .tcdm_slave  ( in            ),
+        .tcdm_master ( postfifo      )
+      );
     end // fifo_gen
     
     assign bank_offset_s = postfifo.add[LSB_COMMON_ADDR-1:2];
@@ -129,12 +129,12 @@ module hci_hwpe_interconnect
       assign postfifo.r_data[ii*32+31:ii*32]  = virt_in[ii].r_data;
       // in a word-interleaved scheme, the internal word-address is given
       // by the highest set of bits in postfifo[0].add, plus the bank-level offset
-      always_comb
-      begin : address_generation
-        if(bank_offset_s + ii >= NB_OUT_CHAN)
+      always_comb begin : address_generation
+        if(bank_offset_s + ii >= NB_OUT_CHAN) begin
           virt_in[ii].add = {postfifo.add[AWC-1:LSB_COMMON_ADDR] + 1, 2'b0};
-        else
+        end else begin
           virt_in[ii].add = {postfifo.add[AWC-1:LSB_COMMON_ADDR], 2'b0};
+        end
       end // address_generation
       
       assign virt_in_gnt[ii] = virt_in[ii].gnt;
@@ -153,8 +153,7 @@ module hci_hwpe_interconnect
       assign virt_in[ii].data = '0;
     end // virt_nil_bind
 
-    for(genvar ii=0; ii<NB_OUT_CHAN; ii++) 
-    begin : virt_out_bind
+    for(genvar ii=0; ii<NB_OUT_CHAN; ii++) begin : virt_out_bind
       assign out[ii].req  = virt_out[ii].req;
       assign out[ii].wen  = virt_out[ii].wen;
       assign out[ii].be   = virt_out[ii].be;
@@ -165,8 +164,7 @@ module hci_hwpe_interconnect
       assign virt_out[ii].r_data  = out[ii].r_data;
 
       // generate out_r_valid
-      always_ff @(posedge clk_i or negedge rst_ni)
-      begin : resp_r_valid
+      always_ff @(posedge clk_i or negedge rst_ni) begin : resp_r_valid
         if(~rst_ni) begin
           out_r_valid[ii] <= 1'b0;
         end
