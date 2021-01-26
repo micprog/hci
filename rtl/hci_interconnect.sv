@@ -50,18 +50,30 @@ module hci_interconnect #(
   hci_core_intf.slave           hwpe
 );
 
-  hci_core_intf all_except_hwpe [N_CORE+N_DMA+N_EXT-1:0] (
+  hci_core_intf #(
+    .DW ( DW_LIC ),
+    .AW ( AWC    ),
+    .BW ( BW_LIC ),
+    .WW ( DW_LIC ),
+    .OW ( 1      )
+  ) all_except_hwpe [N_CORE+N_DMA+N_EXT-1:0] (
     .clk ( clk_i )
   );
 
   hci_mem_intf #(
-    .IW ( IW )
+    .AW ( AWM    ),
+    .DW ( DW_LIC ),
+    .BW ( BW_LIC ),
+    .IW ( IW     )
   ) all_except_hwpe_mem [N_MEM-1:0] (
     .clk ( clk_i )
   );
 
   hci_mem_intf #(
-    .IW ( IW )
+    .AW ( AWM    ),
+    .DW ( DW_LIC ),
+    .BW ( BW_LIC ),
+    .IW ( IW     )
   ) hwpe_mem [N_MEM-1:0] (
     .clk ( clk_i )
   );
@@ -73,7 +85,7 @@ module hci_interconnect #(
       .N_MEM  ( N_MEM               ),
       .IW     ( IW                  ),
       .AWC    ( AWC                 ),
-      .AWM    ( AWM-2               ),
+      .AWM    ( AWM                 ),
       .DW     ( DW_LIC              ),
       .BW     ( BW_LIC              ),
       .TS_BIT ( TS_BIT              )
@@ -108,7 +120,7 @@ module hci_interconnect #(
       .N_MEM  ( N_MEM               ),
       .IW     ( IW                  ),
       .AWC    ( AWC                 ),
-      .AWM    ( AWM-2               ),
+      .AWM    ( AWM                 ),
       .DW     ( DW_LIC              ),
       .BW     ( BW_LIC              ),
       .TS_BIT ( TS_BIT              )
