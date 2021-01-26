@@ -28,6 +28,7 @@ module hci_interconnect #(
   parameter int unsigned AWM     = hci_package::DEFAULT_AW  , // Address width memory (master ports)
   parameter int unsigned DW_LIC  = hci_package::DEFAULT_DW  , // Data Width for Log Interconnect
   parameter int unsigned BW_LIC  = hci_package::DEFAULT_BW  , // Byte Width for Log Interconnect
+  parameter int unsigned UW_LIC  = hci_package::DEFAULT_UW  , // User Width for Log Interconnect
   parameter int unsigned DW_SIC  = 128                      , // UNUSED!!!
   parameter int unsigned TS_BIT  = 21                       , // TEST_SET_BIT (for Log Interconnect)
   parameter int unsigned IW      = N_HWPE+N_CORE+N_DMA+N_EXT, // ID Width
@@ -37,6 +38,7 @@ module hci_interconnect #(
   parameter int unsigned BWH     = hci_package::DEFAULT_BW  , // Byte Width for HWPE Interconnect
   parameter int unsigned WWH     = hci_package::DEFAULT_WW  , // Word Width for HWPE Interconnect
   parameter int unsigned OWH     = AWH                      , // Offset Width for HWPE Interconnect
+  parameter int unsigned UWH     = hci_package::DEFAULT_UW  , // User Width for HWPE Interconnect
   parameter int unsigned SEL_LIC = 0                          // Log interconnect type selector
 ) (
   input logic                   clk_i               ,
@@ -55,7 +57,8 @@ module hci_interconnect #(
     .AW ( AWC    ),
     .BW ( BW_LIC ),
     .WW ( DW_LIC ),
-    .OW ( 1      )
+    .OW ( 1      ),
+    .UW ( UW_LIC )
   ) all_except_hwpe [N_CORE+N_DMA+N_EXT-1:0] (
     .clk ( clk_i )
   );
@@ -64,7 +67,8 @@ module hci_interconnect #(
     .AW ( AWM    ),
     .DW ( DW_LIC ),
     .BW ( BW_LIC ),
-    .IW ( IW     )
+    .IW ( IW     ),
+    .UW ( UW_LIC )
   ) all_except_hwpe_mem [N_MEM-1:0] (
     .clk ( clk_i )
   );
@@ -73,7 +77,8 @@ module hci_interconnect #(
     .AW ( AWM    ),
     .DW ( DW_LIC ),
     .BW ( BW_LIC ),
-    .IW ( IW     )
+    .IW ( IW     ),
+    .UW ( UW_LIC )
   ) hwpe_mem [N_MEM-1:0] (
     .clk ( clk_i )
   );
@@ -88,7 +93,8 @@ module hci_interconnect #(
       .AWM    ( AWM                 ),
       .DW     ( DW_LIC              ),
       .BW     ( BW_LIC              ),
-      .TS_BIT ( TS_BIT              )
+      .TS_BIT ( TS_BIT              ),
+      .UW     ( UW_LIC              )
     ) i_log_interconnect (
       .clk_i  ( clk_i               ),
       .rst_ni ( rst_ni              ),
@@ -105,7 +111,8 @@ module hci_interconnect #(
       .AWC    ( AWC                 ),
       .AWM    ( AWM                 ),
       .DW     ( DW_LIC              ),
-      .BW     ( BW_LIC              )
+      .BW     ( BW_LIC              ),
+      .UW     ( UW_LIC              )
     ) i_log_interconnect (
       .clk_i  ( clk_i               ),
       .rst_ni ( rst_ni              ),
@@ -123,7 +130,8 @@ module hci_interconnect #(
       .AWM    ( AWM                 ),
       .DW     ( DW_LIC              ),
       .BW     ( BW_LIC              ),
-      .TS_BIT ( TS_BIT              )
+      .TS_BIT ( TS_BIT              ),
+      .UW     ( UW_LIC              )
     ) i_log_interconnect (
       .clk_i  ( clk_i               ),
       .rst_ni ( rst_ni              ),
@@ -143,7 +151,8 @@ module hci_interconnect #(
       .AWH         ( AWH     ),
       .BWH         ( BWH     ),
       .WWH         ( WWH     ),
-      .OWH         ( OWH     )
+      .OWH         ( OWH     ),
+      .UWH         ( UWH     )
     ) i_hwpe_interconnect (
       .clk_i   ( clk_i    ),
       .rst_ni  ( rst_ni   ),
